@@ -9,10 +9,7 @@
 </head>
 
 <body>
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/master
 <header>
 	<img alt="an image of a map and location" src="./images/location.png"
 		 width="100">
@@ -24,14 +21,14 @@
 </header>
 
 <main>
-	<div class="row">
-		<div class="col-2">
+	<div class="row">													<!-- Alles hier ding wird mir flexboxen dargestellt -->
+		<div class="col-2">													<!-- Das hir nimmt 2 von insgesamt 12 ein -->
 			<section class="tagging">
 				<h2>Tagging</h2>
 				<!-- ############### Aufgabe1a Form1 Start -->
 				<form id="tag-form" action="/tagging" method="post">
-					<fieldset>
-						<legend><b>Enter new GeoTag</b></legend>
+					<fieldset>													<!-- Alles was kommt ist innerhalt diese Rahmens -->
+						<legend><b>Enter new GeoTag</b></legend>					<!-- Überschrift des Rahmens -->
 						<label for="latitude">latitude</label>
 						<input id="latitude" name="latitude" placeholder="49.01379" type="number" required>
 						<label for="longitude">longitude</label>
@@ -65,15 +62,15 @@
 				</form>
 				<!-- ############### Aufgabe1a Form2 Ende -->
 				<div class="row">
-					<div class="col-5">
-						<div class="taglist">
+					<div class="col-5">												<!-- die 10 übrigen werden aufgeteilt für die  -->
+						<div class="taglist">										<!-- blauen Dinger und die Karte -->
 							<ul id="results">
 								<li>Castle (49.01379, 8.404435) #sight</li>
 								<li>IWI (49.01379, 8.390071) #edu</li>
 							</ul>
 						</div>
 					</div>
-					<div class="col-7">
+					<div class="col-7">												<!-- Die Karte hat 7 von den 12 von den 10 -->
 						<div class="tagmap">
 							<img alt="a map with locations" id="result-img" src="./images/mapview.jpg"/>
 							<div class="caption">Result map</div>
