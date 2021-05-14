@@ -120,7 +120,12 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
         readme: "Dieses Objekt enthält 'öffentliche' Teile des Moduls.",
 
         updateLocation: function() {
-            // TODO Hier Inhalt der Funktion "update" ergänzen
+            const lat = getLatitude(document.getElementsByName("latitude"));
+            const long = getLongitude(document.getElementsByName("longitude"));
+            if(lat == null && long == null) {
+                alert("Hier könnte ihre Fehlernachricht stehen!");
+            }
+            return this.updateLocation
         }
 
     }; // ... Ende öffentlicher Teil
@@ -132,8 +137,8 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
  * des Skripts.
  */
 $(function() {
-    alert("Please change the script 'geotagging.js'");
-    // TODO Hier den Aufruf für updateLocation einfügen
+    alert("Felix ist der geilste!!");
+        this.updateLocation();
 });
 
 
