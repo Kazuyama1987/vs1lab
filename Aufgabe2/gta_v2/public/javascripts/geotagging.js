@@ -82,7 +82,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
     };
 
     // Hier API Key eintragen
-    var apiKey = "YOUR_API_KEY_HERE";
+    var apiKey = "WyTOAGC8RouyGOGbw2xVhAu0LROqFucO";
 
     /**
      * Funktion erzeugt eine URL, die auf die Karte verweist.
@@ -120,14 +120,22 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
         readme: "Dieses Objekt enthält 'öffentliche' Teile des Moduls.",
 
         updateLocation: function() {
-            const lat = getLatitude(document.getElementsByName("latitude"));
-            const long = getLongitude(document.getElementsByName("longitude"));
-            if(lat == null && long == null) {
-                alert("Hier könnte ihre Fehlernachricht stehen!");
+            var onsuccess = function(position){
+                var latitude = getLatitude(position);
+                var longitude = getLongitude(position);
+                document.getElementById('latitude').setAttribute("value", latitude);
+                document.getElementById('longitude').setAttribute("value", longitude);
+                document.getElementById('hidden_latitude').setAttribute("value", latitude);
+                document.getElementById('hidden_longitude').setAttribute("value", longitude);
+                var mapquest = getLocationMapSrc(latitude,longitude);
+                document.getElementById('result-img').setAttribute("src",mapquest);
             }
-            return this.updateLocation
-        }
 
+            var onerror = function(msg){
+                console.log(msg);
+            }
+            tryLocate(onsuccess, onerror);
+        }
     }; // ... Ende öffentlicher Teil
 })(GEOLOCATIONAPI);
 
@@ -137,8 +145,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
  * des Skripts.
  */
 $(function() {
-    alert("Felix ist der geilste!!");
-        this.updateLocation();
+    gtaLocator.updateLocation();
 });
 
 
