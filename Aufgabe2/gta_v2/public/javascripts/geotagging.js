@@ -40,6 +40,8 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 
     // Private Member
 
+   
+
     /**
      * Funktion spricht Geolocation API an.
      * Bei Erfolg Callback 'onsuccess' mit Position.
@@ -119,7 +121,15 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 
         readme: "Dieses Objekt enthält 'öffentliche' Teile des Moduls.",
 
+
         updateLocation: function() {
+
+            var lon = document.getElementById("longitude");
+            var lat = document.getElementById("latitude");
+
+            navigator.geolocation.getCurrentPosition(getCurrentPosition, tryLocate);
+
+           tryLocate(getCurrentPosition,);
             // TODO Hier Inhalt der Funktion "update" ergänzen
         }
 
