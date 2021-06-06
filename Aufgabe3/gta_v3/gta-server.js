@@ -30,6 +30,7 @@ app.set('view engine', 'ejs');
  */
 
 // TODO: CODE ERGÄNZEN
+app.use(express.static('public'));
 
 /**
  * Konstruktor für GeoTag Objekte.
@@ -37,6 +38,9 @@ app.set('view engine', 'ejs');
  */
 
 // TODO: CODE ERGÄNZEN
+function createGeoTag(name, latitude, longitude, hashtag) {
+    return { name, latitude, longitude, hashtag };
+}
 
 /**
  * Modul für 'In-Memory'-Speicherung von GeoTags mit folgenden Komponenten:
@@ -48,6 +52,41 @@ app.set('view engine', 'ejs');
  */
 
 // TODO: CODE ERGÄNZEN
+var geoTags = [];
+
+var geoTagsHelpers = {
+    addGeoTag: function (geoTag) {
+        geoTags.push(geoTag);
+    },
+
+    deleteGeoTag: function (deletableGeoTag) {
+        var index = geoTags.findIndex(function (geoTag) {
+            return geoTag.name === deletableGeoTag.name
+                && geoTag.hashtag === deletableGeoTag.hashtag
+                && geoTag.latitude === deletableGeoTag.latitude
+                && geoTag.longitude === deletableGeoTag.latitude;
+        });
+
+        geoTags.splice(index, 1);
+    },
+
+    searchByName: function (geoTagName) {
+        return geoTags.filter(function (geoTag) {
+            return geoTag.name.includes(geoTagName);
+        });
+    },
+
+    searchByRadius: function (latitude, longitude, radius) {
+        return geoTags.filter(function (geoTag) {
+            var longitudeDifference = longitude - geoTag.longitude;
+            var latitudeDifference = latitude - geoTag.latitude;
+            
+            var distance = Math.sqrt(Math.pow(longitudeDifference, 2) + Math.pow(latitudeDifference, 2));
+
+            return distance <= radius;
+        });
+    },
+}
 
 /**
  * Route mit Pfad '/' für HTTP 'GET' Requests.
@@ -79,6 +118,25 @@ app.get('/', function(req, res) {
 
 // TODO: CODE ERGÄNZEN START
 
+app.post("/tagging", function (req, res) {
+    var latitude = req.body.latitude;
+    var longitude = req.body.longitude;
+
+    var geoTag = createGeoTag(req.body.name, latitude, longitude, req.body.hashtag);
+
+    geoTagsHelpers.addGeoTag(geoTag);
+
+    var filteredGeoTags = geoTagsHelpers.searchByRadius(latitude, longitude, 4000);
+
+    res.render("gta", {
+        latitude,
+        longitude,
+        searchterm: undefined,
+        taglist: filteredGeoTags,
+        tags: JSON.stringify(filteredGeoTags),
+    })
+})
+
 /**
  * Route mit Pfad '/discovery' für HTTP 'POST' Requests.
  * (http://expressjs.com/de/4x/api.html#app.post.method)
@@ -92,6 +150,17 @@ app.get('/', function(req, res) {
  */
 
 // TODO: CODE ERGÄNZEN
+app.post("/discovery", function (req, res) {
+    var filteredGeoTags = geoTagsHelpers.searchByName(req.body.searchterm);    
+
+    res.render("gta", {
+        searchterm: req.body.searchterm,
+        taglist: filteredGeoTags,
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
+        tags: JSON.stringify(filteredGeoTags),
+    })
+})
 
 /**
  * Setze Port und speichere in Express.
