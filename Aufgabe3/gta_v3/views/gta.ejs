@@ -30,15 +30,31 @@
 					<fieldset>
 						<legend><b>Enter new GeoTag</b></legend>
 						<label for="latitude">latitude</label>
-						<input id="latitude" name="latitude" placeholder="49.01379" type="number" step="any" required>
+						<% if(locals.latitude) { -%>
+							<input type="number" step="any" id="latitude" name="latitude" placeholder="21.2456321" required value=<%- latitude %>>
+						<% } else { %>
+							<input type="number" step="any" id="latitude" name="latitude" placeholder="21.2456321" required>
+						<% } %>
+
 						<label for="longitude">longitude</label>
-						<input id="longitude" name="longitude" placeholder="8.404435" type="number" step="any" required>
+						<% if(locals.longitude) { -%>
+							<input type="number" step="any" id="longitude" name="longitude" placeholder="23.5335327" required value=<%- longitude %>>
+						<% } else { %>
+							<input type="number" step="any" id="longitude" name="longitude" placeholder="23.5335327" required>
+						<% } %>
+
 						<label for="name">name</label>
-						<input id="name" name="name" placeholder="some name" type="text"
-							   pattern="[A-Z]\w{1,10}" required>
+						<% if(locals.name) { -%>
+							<input type="text" id="name" name="name" placeholder="z.B Hochschule" maxlength="10" pattern="[a-zA-Z]+" required value=<%- name %>>
+						<% } else { %>
+							<input type="text" id="name" name="name" placeholder="z.B Hochschule" maxlength="10" pattern="[a-zA-Z]+" required>
+						<% } %>
 						<label for="hashtag">hashtag</label>
-						<input id="hashtag" name="hashtag" placeholder="# + max. 10 letters"
-							   type="text" pattern="#+[A-Za-z]+" maxlength="11">
+						<% if(locals.hashtag) { %>
+							<input type="text" id="hashtag" name="hashtag" placeholder="# + max. 10 letters" maxlength="11" pattern="#[a-zA-Z]+" required value=<%- hashtag %>>
+						<% } else { %>
+							<input type="text" id="hashtag" name="hashtag" placeholder="# + max. 10 letters" maxlength="11" pattern="#[a-zA-Z]+" required>
+						<% } %>
 						<label for="submit"></label>
 						<input id="submit" type="submit">
 					</fieldset>
@@ -75,7 +91,11 @@
 					</div>
 					<div class="col-7">
 						<div class="tagmap">
-							<img alt="a map with locations" id="result-img" src="./images/mapview.jpg"/>
+							<% if (taglist !== undefined) { %>
+								<img id="result-img" src="./images/mapview.jpg" alt="a map with locations" data-tags=<%- JSON.stringify(taglist) %> <% console.log("testing" + JSON.stringify(taglist)) %> />
+							<% } else { %>
+								<img id="result-img" src="./images/mapview.jpg" alt="a map with locations"/>
+							<% } %>
 							<div class="caption">Result map</div>
 						</div>
 					</div>

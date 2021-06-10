@@ -29,12 +29,16 @@ app.set('view engine', 'ejs');
  * Teste das Ergebnis im Browser unter 'http://localhost:3000/'.
  */
 
+// TODO: CODE ERGÄNZEN
+
 app.use(express.static(__dirname + '/public'));
 
 /**
  * Konstruktor für GeoTag Objekte.
  * GeoTag Objekte sollen min. alle Felder des 'tag-form' Formulars aufnehmen.
  */
+
+// TODO: CODE ERGÄNZEN
 
 class GeoTag {
     constructor(lat, long, n, hash) {
@@ -53,6 +57,8 @@ class GeoTag {
  * - Funktion zum hinzufügen eines Geo Tags.
  * - Funktion zum Löschen eines Geo Tags.
  */
+
+// TODO: CODE ERGÄNZEN
 
 const geomod = require('./geomodule/geomod');
 
@@ -84,6 +90,8 @@ app.get('/', function(req, res) {
  * Die Objekte liegen in einem Standard Radius um die Koordinate (lat, lon).
  */
 
+// TODO: CODE ERGÄNZEN START
+
 const url = require('url');
 app.post('/tagging',(req, res) => {
     var geo = new GeoTag(req.body["latitude"], req.body["longitude"], req.body["name"], req.body["hashtag"]);
@@ -110,6 +118,8 @@ app.post('/tagging',(req, res) => {
  * Falls 'term' vorhanden ist, wird nach Suchwort gefiltert.
  */
 
+// TODO: CODE ERGÄNZEN
+
 app.post('/discovery', function (req, res) {
 
     console.log("Here are our cookies !");
@@ -118,8 +128,10 @@ app.post('/discovery', function (req, res) {
 
     var searchItem = req.body["term"];
     var result = geomod.searchFromTerm(searchItem.toString());
-
+    
 });
+
+
 
 /**
  * Setze Port und speichere in Express.

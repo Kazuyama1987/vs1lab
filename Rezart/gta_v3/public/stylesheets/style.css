@@ -1,0 +1,110 @@
+body {
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  }
+  
+  header {
+    background-color: grey;
+    padding: 1rem;
+    min-width: 150px;
+  }
+  
+  h1 {
+    color: white;
+  }
+  
+  a {
+    color: #00b7ff;
+  }
+  
+  main {
+    display: flex;
+    flex-wrap: column;
+    gap: 32px;
+  }
+  
+  .tagging {
+    width: 18%;
+  }
+  
+  #tag-form fieldset input {
+    display: block;
+    max-width: 130px;
+  }
+  
+  legend, label{
+    font-weight: bold;
+  }
+  
+  input {
+    margin-top: 0.7rem;
+    margin-bottom: 0.7rem;
+    padding: 0.5rem;
+  }
+  
+  .discovery {
+    width: 75%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .discovery h2, #filter-form {
+    flex-basis: 100%;
+  }
+  
+  .discovery .taglist {
+    flex: 1;
+  }
+  
+  .discovery .tagmap {
+    padding: 1rem 2rem;
+    flex: 2;
+  }
+  
+  #results {
+    padding-left: 5px;
+  }
+  
+  #results li { 
+    color: white;
+    background-color: #00b7ff;
+    margin: 0 0 10px 0;
+    padding: 10px;
+    min-width: 150px;
+    font-weight: bold;
+  }
+  
+  #result-img {
+    max-height: 600px;
+    width: 100%;
+    min-width: 180px;
+  }
+  
+  footer {
+    color: white;
+    background-color: grey;
+    padding: 0.5rem;
+    min-width: 150px;
+    font-weight: bold;
+  }
+  
+  @media screen and (max-width:992px) {
+    main {
+      flex-direction: column;
+    }
+    section.discovery, section.tagging{
+      width: 100%;
+    }
+    section.discovery .taglist {
+      max-width: 556px;
+      flex-basis: 100%;
+    }
+    section.discovery .tagmap {
+      max-width: 992px;
+      flex-basis: 100%;
+      padding: 0 0;
+    }
+    .taglist #results {
+      padding-left: 0px;
+    }
+  }

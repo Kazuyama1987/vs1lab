@@ -1,0 +1,118 @@
+
+	<!-- TODO: HTML AUS AUFGABE2 HIERHER KOPIEREN UND DIE BEISPIEL-EINTRÄGE DER DISCOVERY-LISTE MIT DEN FOLGENDEN ZEILEN ERSETZEN -->
+	<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>GeoTagApp</title>
+		<link rel='stylesheet' href='./stylesheets/style.css'/>
+	</head>
+
+	<body>
+
+		<header>
+			<img src="./images/location.png" width="100"
+					alt="an image of a map and location">
+			<h1>GeoTagApp</h1>
+			<nav>
+				<a href="#">About</a> | <a href="#">Help</a> | <a
+					href="/">Home</a>
+			</nav>
+		</header>
+
+		<main>
+
+			<section class="tagging">
+				<h2>Tagging</h2>
+				<!-- ############### Aufgabe1a Form1 Start -->
+				<form id="tag-form" action="/tagging" method="post">
+					<fieldset>
+						<legend>Enter new GeoTag</legend>
+						<label for="latitude">latitude</label>
+						<% if(locals.latitude) { -%>
+							<input type="number" step="any" id="latitude" name="latitude" placeholder="21.2456321" required value=<%- latitude %>>
+						<% } else { %>
+							<input type="number" step="any" id="latitude" name="latitude" placeholder="21.2456321" required>
+						<% } %>
+
+						<label for="longitude">longitude</label>
+						<% if(locals.longitude) { -%>
+							<input type="number" step="any" id="longitude" name="longitude" placeholder="23.5335327" required value=<%- longitude %>>
+						<% } else { %>
+							<input type="number" step="any" id="longitude" name="longitude" placeholder="23.5335327" required>
+						<% } %>
+						
+						<label for="name">name</label>
+						<% if(locals.name) { -%>
+							<input type="text" id="name" name="name" placeholder="z.B Hochschule" maxlength="10" pattern="[a-zA-Z]+" required value=<%- name %>>
+						<% } else { %>
+							<input type="text" id="name" name="name" placeholder="z.B Hochschule" maxlength="10" pattern="[a-zA-Z]+" required>
+						<% } %>
+						
+						<label for="hashtag">hashtag</label>
+						<% if(locals.hashtag) { %>
+							<input type="text" id="hashtag" name="hashtag" placeholder="# + max. 10 letters" maxlength="11" pattern="#[a-zA-Z]+" required value=<%- hashtag %>>
+						<% } else { %>
+							<input type="text" id="hashtag" name="hashtag" placeholder="# + max. 10 letters" maxlength="11" pattern="#[a-zA-Z]+" required>
+						<% } %>
+
+						<input type="submit" value="submit">
+					</fieldset>
+				</form>
+				<!-- ############### Aufgabe1a Form1 Ende -->
+
+			</section>
+
+			<section class="discovery">
+				<h2>Discovery</h2>
+
+				<!-- ############### Aufgabe1a Form2 Start -->
+				<form id="filter-form" action="/discovery" method="post">
+					<fieldset>
+						<legend>Filter by Searchterm</legend>
+						<input type="text" id="term" name="term" placeholder="search term" required>
+						<input type="submit" id="term-apply" value="apply">
+						<input id="hidden-latitude" type="hidden" name="hidden-latitude">
+                        <input id="hidden-longitude" type="hidden" name="hidden-longitude">
+					</fieldset>
+				</form>
+					
+					
+				<!-- ############### Aufgabe1a Form2 Ende -->
+
+				<div class="taglist">
+					<ul id="results">
+						<% if (taglist !== undefined) taglist.forEach(function(gtag) { %>
+							<li><%= gtag.name %> ( <%= gtag.latitude %>,<%= gtag.longitude %>) <%= gtag.hashtag %> </li>
+						<% }); %>
+					</ul>
+				</div>
+
+				<div class="tagmap">
+					<% if (taglist !== undefined) { %>
+						<img id="result-img" src="./images/mapview.jpg" alt="a map with locations" data-tags=<%- JSON.stringify(taglist) %> <% console.log("testing" + JSON.stringify(taglist)) %> />
+					<% } else { %>
+						<img id="result-img" src="./images/mapview.jpg" alt="a map with locations"/>
+					<% } %>
+					<div class="caption">Result map</div>
+				</div>
+
+			</section>
+
+		</main>
+
+		<footer>
+			<span>2017 by LKIT</span>
+		</footer>
+
+	</body>
+
+	<!-- Load JavaScripts
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="./javascripts/geotagging.js"></script>
+	
+</html>
