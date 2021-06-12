@@ -80,6 +80,29 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
     var getLongitude = function(position) {
         return position.coords.longitude;
     };
+    var getTagList = function() {
+        return JSON.parse(document.getElementById("result-img").dataset.tags)
+    };
+
+    var errorfunction = function(msg){
+        alert(msg);
+    };
+
+    var successfunction = function(position){
+
+        var latitude = getLatitude(position);
+        var longitude = getLongitude(position);
+
+        document.getElementById("latitude").value = latitude;
+        document.getElementById("longitude").value = longitude;
+
+        document.getElementById("hidden_latitude").value = latitude;
+        document.getElementById("hidden_longitude").value = longitude;
+
+        var returnurl = getLocationMapSrc(latitude, longitude);
+
+        document.getElementById("result-img").src = returnurl;
+    };
 
     // Hier API Key eintragen
     var apiKey = "WyTOAGC8RouyGOGbw2xVhAu0LROqFucO";
@@ -120,27 +143,27 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
         readme: "Dieses Objekt enthält 'öffentliche' Teile des Moduls.",
 
         updateLocation: function() {
-            var onsuccess = function(position){
-                var latitude = getLatitude(position);
-                var longitude = getLongitude(position);
-                document.getElementById('latitude').setAttribute("value", latitude);
-                document.getElementById('longitude').setAttribute("value", longitude);
-                document.getElementById('hidden_latitude').setAttribute("value", latitude);
-                document.getElementById('hidden_longitude').setAttribute("value", longitude);
-                var mapquest = getLocationMapSrc(latitude,longitude);
-                document.getElementById('result-img').setAttribute("src",mapquest);
+            const latitudeElement = document.getElementById('latitude')
+            const longitudeElement = document.getElementById('longitude')
+            const hiddenLatitude = document.getElementById('hidden_latitude')
+            const hiddenLongitude = document.getElementById('hidden_longitude')
+            // If no values exist yet request location
+            if ((latitudeElement.value === "") ||
+                (longitudeElement.value === "") ||
+                (hiddenLatitude.value === "") ||
+                (hiddenLongitude.value === "") ||
+                (isNaN(latitudeElement.value)) ||
+                (isNaN(longitudeElement.value)) ||
+                (isNaN(hiddenLatitude.value)) ||
+                (isNaN(hiddenLongitude.value))) {
+                tryLocate(successfunction, errorfunction);
             }
-
-            var onerror = function(msg){
-                console.log(msg);
-            }
-            if ($("#longitude").val() === "" && $("#latitude").val() === "") {
-                tryLocate(success, failure);
-
-            } else {
-                var tags = JSON.parse($("#result-img").attr("data-tags"))
-                var mapURL = getLocationMapSrc(tags[tags.length - 1].latitude, tags[tags.length - 1].longitude, tags, 10);
-                $("#result-img").attr("src", mapURL);
+            else {
+                var latitude = document.getElementById("latitude").value;
+                var longitude = document.getElementById("longitude").value;
+                var tagList = getTagList();
+                var returnurl = getLocationMapSrc(latitude, longitude, tagList);
+                document.getElementById("result-img").src = returnurl;
             }
         }
     }; // ... Ende öffentlicher Teil
@@ -154,3 +177,5 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 $(function() {
     gtaLocator.updateLocation();
 });
+
+

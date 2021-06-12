@@ -29,21 +29,19 @@ app.set('view engine', 'ejs');
  * Teste das Ergebnis im Browser unter 'http://localhost:3000/'.
  */
 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + "/public"));
 
 /**
  * Konstruktor für GeoTag Objekte.
  * GeoTag Objekte sollen min. alle Felder des 'tag-form' Formulars aufnehmen.
  */
 
-class GeoTag {
-    constructor(lat, long, n, hash) {
-        this.latitude = lat;
-        this.longitude = long;
-        this.name = n;
-        this.hashtag = hash;
-    }
-};
+function Geotag(latitude, longitude, name, hashtag){
+    this.latitude = latitude;
+    this.longitude = longitude;
+    this.name = name;
+    this.hashtag = hashtag;
+}
 
 /**
  * Modul für 'In-Memory'-Speicherung von GeoTags mit folgenden Komponenten:
@@ -54,7 +52,49 @@ class GeoTag {
  * - Funktion zum Löschen eines Geo Tags.
  */
 
-const geomod = require('./geomodule/geomod');
+var geotagModule = (function (){
+    /* 'private' Member */
+    // Array als Speicher für Geo Tags
+    var geoTags = [];
+
+    /* 'public' Member als Rückgabe-Objekt */
+    return{
+        //Funktion zur Suche von Geo Tags in einem Radius um eine Koordinate
+        searchGeotagsRadius : function (latitude, longitude) {
+            var radius = 100;
+            var tagsFound = [];
+            geoTags.forEach(function (tag){
+                if(radius >= Math.sqrt(Math.pow(tag.latitude - latitude, 2)
+                    + Math.pow(tag.longitude - longitude, 2))){
+                    tagsFound.push(tag);
+                }
+            });
+            return tagsFound;
+        },
+        //Funktion zur Suche von Geo Tags nach Suchbegriff
+        searchGeotags : function (search){
+            var tagsFound = [];
+            geoTags.forEach(function (tag){
+                if(tag.name.toString().includes(search.toString())){
+                    tagsFound.push(tag);
+                }
+            });
+            return tagsFound;
+        },
+        //Funktion zum hinzufügen eines Geo Tags
+        addGeoTag : function (latitude, longitude, name, hashtag){
+            var newGeotag = new Geotag(latitude, longitude, name, hashtag);
+           geoTags.push(newGeotag);
+        },
+        //Funktion zum Löschen eines Geo Tags
+        deleteGeotag : function (tag){
+            geoTags.splice(tag, 1);
+
+
+
+        }
+    };
+})();
 
 /**
  * Route mit Pfad '/' für HTTP 'GET' Requests.
@@ -67,7 +107,11 @@ const geomod = require('./geomodule/geomod');
 
 app.get('/', function(req, res) {
     res.render('gta', {
-        taglist: []
+        taglist: [],
+        newLatitude : req.body.latitude,
+        newLongitude : req.body.longitude
+
+
     });
 });
 
@@ -84,17 +128,15 @@ app.get('/', function(req, res) {
  * Die Objekte liegen in einem Standard Radius um die Koordinate (lat, lon).
  */
 
-const url = require('url');
-app.post('/tagging',(req, res) => {
-    var geo = new GeoTag(req.body["latitude"], req.body["longitude"], req.body["name"], req.body["hashtag"]);
-    geomod.addTag(geo);
-    console.log("post " + req.gody)
-    res.render("gta", {
-        latitude: geo.latitude,
-        longitude: geo.longitude,
-        name: geo.name,
-        hashtag: geo.hashtag,
-        taglist: geomod.geoTagArray
+app.post('/tagging', function (req,res){
+    geotagModule.addGeoTag(req.body.latitude, req.body.longitude, req.body.name, req.body.hashtag);
+    var tagInRadius = geotagModule.searchGeotagsRadius(req.body.latitude, req.body.latitude);
+
+    res.render('gta', {
+        taglist: tagInRadius,
+        newLatitude : req.body.latitude,
+        newLongitude : req.body.longitude
+
     });
 });
 
@@ -110,15 +152,17 @@ app.post('/tagging',(req, res) => {
  * Falls 'term' vorhanden ist, wird nach Suchwort gefiltert.
  */
 
-app.post('/discovery', function (req, res) {
+app.post('/discovery', function (req,res){
+    var tagInRadius = geotagModule.searchGeotagsRadius(req.body.latitude, req.body.latitude);
+    if (req.body.search !== undefined) {
+        tagInRadius = geotagModule.searchGeotags(req.body.search, tagInRadius)
+    }
 
-    console.log("Here are our cookies !");
-    console.log(req.cookies);
-    console.log(req.body["searchBox"])
-
-    var searchItem = req.body["term"];
-    var result = geomod.searchFromTerm(searchItem.toString());
-
+    res.render('gta', {
+        taglist: tagInRadius,
+        newLatitude : req.body.latitude,
+        newLongitude : req.body.longitude
+    });
 });
 
 /**

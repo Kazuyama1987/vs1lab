@@ -30,31 +30,17 @@
 					<fieldset>
 						<legend><b>Enter new GeoTag</b></legend>
 						<label for="latitude">latitude</label>
-						<% if(locals.latitude) { -%>
-							<input type="number" step="any" id="latitude" name="latitude" placeholder="21.2456321" required value=<%- latitude %>>
-						<% } else { %>
-							<input type="number" step="any" id="latitude" name="latitude" placeholder="21.2456321" required>
-						<% } %>
-
+						<input id="latitude" name="latitude" placeholder="49.01379" type="number" step="any"
+							   value="<%= newLatitude %>"required>
 						<label for="longitude">longitude</label>
-						<% if(locals.longitude) { -%>
-							<input type="number" step="any" id="longitude" name="longitude" placeholder="23.5335327" required value=<%- longitude %>>
-						<% } else { %>
-							<input type="number" step="any" id="longitude" name="longitude" placeholder="23.5335327" required>
-						<% } %>
-
+						<input id="longitude" name="longitude" placeholder="8.404435" type="number" step="any"
+							   value="<%= newLongitude %>" required>
 						<label for="name">name</label>
-						<% if(locals.name) { -%>
-							<input type="text" id="name" name="name" placeholder="z.B Hochschule" maxlength="10" pattern="[a-zA-Z]+" required value=<%- name %>>
-						<% } else { %>
-							<input type="text" id="name" name="name" placeholder="z.B Hochschule" maxlength="10" pattern="[a-zA-Z]+" required>
-						<% } %>
+						<input id="name" name="name" placeholder="some name" type="text"
+							   pattern="[A-Z]\w{1,10}" required>
 						<label for="hashtag">hashtag</label>
-						<% if(locals.hashtag) { %>
-							<input type="text" id="hashtag" name="hashtag" placeholder="# + max. 10 letters" maxlength="11" pattern="#[a-zA-Z]+" required value=<%- hashtag %>>
-						<% } else { %>
-							<input type="text" id="hashtag" name="hashtag" placeholder="# + max. 10 letters" maxlength="11" pattern="#[a-zA-Z]+" required>
-						<% } %>
+						<input id="hashtag" name="hashtag" placeholder="# + max. 10 letters"
+							   type="text" pattern="#+[A-Za-z]+" maxlength="11">
 						<label for="submit"></label>
 						<input id="submit" type="submit">
 					</fieldset>
@@ -72,8 +58,8 @@
 						<legend><b>Filter by Searchterm</b></legend>
 						<label for="search"></label>
 						<input id="search" name="search" placeholder="search term" type="text">
-						<input id="hidden_latitude" type="hidden" name="hidden_latitude">
-						<input id="hidden_longitude" type="hidden" name="hidden_longitude">
+						<input id="hidden_latitude" type="hidden" name="hidden_latitude" value="<%= newLatitude %>">
+						<input id="hidden_longitude" type="hidden" name="hidden_longitude" value="<%= newLongitude %>">
 						<label for="apply"></label>
 						<input id="apply" type="submit" value="apply">
 					</fieldset>
@@ -84,18 +70,16 @@
 						<div class="taglist">
 							<ul id="results">
 								<% if (taglist !== undefined) taglist.forEach(function(gtag) { %>
-									<li><%= gtag.name %> ( <%= gtag.latitude %>,<%= gtag.longitude %>) <%= gtag.hashtag %> </li>
+									<li><%= gtag.name %> ( <%= gtag.latitude %>,<%= gtag.longitude %>)
+										<%= gtag.hashtag %> </li>
 								<% }); %>
 							</ul>
 						</div>
 					</div>
 					<div class="col-7">
 						<div class="tagmap">
-							<% if (taglist !== undefined) { %>
-								<img id="result-img" src="./images/mapview.jpg" alt="a map with locations" data-tags=<%- JSON.stringify(taglist) %> <% console.log("testing" + JSON.stringify(taglist)) %> />
-							<% } else { %>
-								<img id="result-img" src="./images/mapview.jpg" alt="a map with locations"/>
-							<% } %>
+							<img alt="a map with locations" id="result-img" src="./images/mapview.jpg"
+								 data-tags="<%= JSON.stringify(taglist) %>"/>
 							<div class="caption">Result map</div>
 						</div>
 					</div>
@@ -110,10 +94,11 @@
 <footer>
 	<span>2021 by LKIT</span>
 </footer>
+
+</body>
 <!-- Load JavaScripts
-================================================== -->
+    ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="./javascripts/geotagging.js"></script>
-</body>
 </html>
