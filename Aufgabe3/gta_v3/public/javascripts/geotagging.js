@@ -134,7 +134,14 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
             var onerror = function(msg){
                 console.log(msg);
             }
-            tryLocate(onsuccess, onerror);
+            if ($("#longitude").val() === "" && $("#latitude").val() === "") {
+                tryLocate(success, failure);
+
+            } else {
+                var tags = JSON.parse($("#result-img").attr("data-tags"))
+                var mapURL = getLocationMapSrc(tags[tags.length - 1].latitude, tags[tags.length - 1].longitude, tags, 10);
+                $("#result-img").attr("src", mapURL);
+            }
         }
     }; // ... Ende öffentlicher Teil
 })(GEOLOCATIONAPI);
