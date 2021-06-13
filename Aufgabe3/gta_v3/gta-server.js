@@ -79,6 +79,7 @@
                      tagsFound.push(tag);
                  }
              });
+             console.log(tagsFound)
              return tagsFound;
          },
          //Funktion zum hinzufügen eines Geo Tags
@@ -89,8 +90,6 @@
          //Funktion zum Löschen eines Geo Tags
          deleteGeotag : function (tag){
              geoTags.splice(tag, 1);
- 
- 
  
          }
      };
@@ -110,8 +109,6 @@
          taglist: [],
          newLatitude : req.body.latitude,
          newLongitude : req.body.longitude
- 
- 
      });
  });
  
@@ -135,8 +132,8 @@
      res.render('gta', {
          taglist: tagInRadius,
          newLatitude : req.body.latitude,
-         newLongitude : req.body.longitude
- 
+         newLongitude : req.body.longitude,
+         TagListJSON : JSON.stringify(tagInRadius)
      });
  });
  
@@ -156,12 +153,14 @@
      var tagInRadius = geotagModule.searchGeotagsRadius(req.body.latitude, req.body.latitude);
      if (req.body.search !== undefined) {
          tagInRadius = geotagModule.searchGeotags(req.body.search, tagInRadius)
+         console.log("tags sind" + tagInRadius)
      }
  
      res.render('gta', {
          taglist: tagInRadius,
-         newLatitude : req.body.latitude,
-         newLongitude : req.body.longitude
+         newLatitude : req.body.hidden_latitude,
+         newLongitude : req.body.hidden_longitude,
+         TagListJSON : JSON.stringify(tagInRadius)
      });
  });
  
